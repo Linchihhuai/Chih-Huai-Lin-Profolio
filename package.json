@@ -1,0 +1,20 @@
+{
+  "name": "chih-huai-lin-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chih-Huai Lin's static professional portfolio",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "social": "node scripts/social.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs --built",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "test:browser": "npm run build && node tests/browser.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.14.0",
+    "playwright": "1.62.1"
+  }
+}
