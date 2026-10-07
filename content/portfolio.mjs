@@ -7,6 +7,7 @@ export default {
   title: 'Chih-Huai Lin — SAP ABAP Developer',
   description: 'Chih-Huai Lin is an SAP ABAP developer and computer science graduate of Institut Paul Lambin, developing practical skills in embedded systems and robotics.',
   introduction: {
+    headline: ['Software.', 'Systems.', 'Curiosity.'],
     kicker: 'Software · Systems · Curiosity',
     summary: 'A computer science background, an ABAP focus, and a growing interest in how software meets hardware.',
     tags: ['SAP ABAP', 'Computer science', 'Exploring embedded systems'],
@@ -18,6 +19,11 @@ export default {
     projects: 'Selected projects',
     education: 'Education & skills',
     contact: 'Contact'
+  },
+  statements: {
+    about: 'From language to logic. From software toward hardware.',
+    skills: 'Three connected interests. Different stages of experience.',
+    skillsInstruction: 'Select an orbiting planet or a category to explore.'
   },
   about: [
     'I’m Chih-Huai Lin, an SAP ABAP developer and a computer science graduate of Institut Paul Lambin in Brussels, Belgium.',
@@ -46,7 +52,7 @@ export default {
       title: 'A professional home on the web',
       summary: 'A focused portfolio connecting my work in enterprise software with my background and developing engineering interests.',
       problem: 'Present a varied professional and academic background clearly, without overstating experience.',
-      implementation: 'A static, responsive site with semantic HTML, accessible navigation, and content maintained in one data file.',
+      implementation: 'A static, responsive site with an interactive skills map, accessible motion controls, and content maintained in one data file.',
       contribution: 'Provided the background, content direction, and design brief; implementation developed with AI assistance.',
       technologies: ['HTML', 'CSS', 'JavaScript', 'Node.js'],
       status: 'Implemented',
@@ -58,9 +64,24 @@ export default {
     { label: 'Earlier studies', title: 'Applied English', institution: '', location: 'Taiwan' }
   ],
   skills: [
-    { title: 'Professional focus', items: ['SAP', 'ABAP'] },
-    { title: 'Academic foundation', items: ['Computer science'] },
-    { title: 'Developing practical skills', items: ['Electronics', 'Microcontrollers', 'Embedded systems', 'Robotics'] }
+    {
+      key: 'professional', title: 'Professional focus', shortTitle: 'SAP & ABAP',
+      words: ['ABAP', 'SAP', 'Professional'],
+      description: 'SAP ABAP development is my professional focus, supported by my computer science background.',
+      items: ['SAP', 'ABAP']
+    },
+    {
+      key: 'academic', title: 'Academic foundation', shortTitle: 'Computer science',
+      words: ['Computer', 'science', 'Foundation'],
+      description: 'A computer science graduate of Institut Paul Lambin in Brussels, Belgium, with earlier studies in Applied English in Taiwan.',
+      items: ['Computer science']
+    },
+    {
+      key: 'learning', title: 'Developing practical skills', shortTitle: 'Hardware learning',
+      words: ['Embedded', 'robotics', 'Learning'],
+      description: 'I’m developing practical skills in electronics, microcontrollers, embedded systems, and robotics. This is an area of personal learning alongside my professional software work.',
+      items: ['Electronics', 'Microcontrollers', 'Embedded systems', 'Robotics']
+    }
   ],
   contact: {
     heading: 'A place to start a conversation.',

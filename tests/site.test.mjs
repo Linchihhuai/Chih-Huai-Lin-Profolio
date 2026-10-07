@@ -15,6 +15,7 @@ test('the built document has semantic landmarks, a single identity heading, and 
   assert.equal((html.match(/<h1(?:\s|>)/g) || []).length, 1);
   assert.match(html, /<main[^>]+id="main-content"[^>]+tabindex="-1"/);
   assert.match(html, /<nav[^>]+aria-label="Portfolio sections"/);
+  assert.match(html, /<header[^>]+class="site-header"/);
   assert.match(html, /class="skip-link" href="#main-content"/);
   for (const id of ['about', 'experience', 'projects', 'education', 'contact']) {
     assert.match(html, new RegExp(`<section id="${id}"[^>]+aria-labelledby="${id}-heading"`));
@@ -49,12 +50,34 @@ test('all public assets resolve from the GitHub Pages repository subdirectory', 
   assert.ok(assetPaths.some((value) => value.endsWith('styles.css')));
   assert.ok(assetPaths.some((value) => value.endsWith('site.js')));
   assert.ok(assetPaths.some((value) => value.endsWith('favicon.svg')));
+  const styles = await readFile(path.join(root, 'dist/assets/styles.css'), 'utf8');
+  const fontUrls = [...styles.matchAll(/url\(["']?(\.\/[^)"']+\.woff2)["']?\)/g)].map((match) => match[1]);
+  assert.ok(fontUrls.length > 0, 'Display typography must use a bundled WOFF2 font');
+  for (const font of fontUrls) {
+    const fontPath = path.join(root, 'dist/assets', font);
+    assert.ok((await stat(fontPath)).size > 0, `Bundled font missing or empty: ${font}`);
+  }
   for (const asset of assetPaths) {
     const resolved = new URL(asset, base);
     assert.ok(resolved.pathname.startsWith(`${base.pathname}assets/`), `Asset escaped the Pages base: ${asset}`);
     assert.ok((await stat(path.join(root, 'dist', asset))).size > 0, `Asset missing or empty: ${asset}`);
   }
   assert.equal(await readFile(path.join(root, 'dist/.nojekyll'), 'utf8'), '');
+});
+
+test('skill exploration controls have matching, labelled panels and complete static skill content', () => {
+  const keys = ['professional', 'academic', 'learning'];
+  const panels = [...html.matchAll(/<[^>]+data-skill-panel="([^"]+)"[^>]*>/g)];
+  assert.deepEqual(panels.map((match) => match[1]), keys);
+  for (const [index, key] of keys.entries()) {
+    assert.match(html, new RegExp(`<button[^>]+data-skill-select="${key}"[^>]*>`), `${key} planet should be a native button`);
+    assert.match(html, new RegExp(`<button[^>]+data-skill-tab="${key}"[^>]*>`), `${key} tab should be a native button`);
+    assert.doesNotMatch(panels[index][0], /\shidden(?:[\s=>])/, 'Skill panels must remain readable before JavaScript');
+    for (const item of data.skills[index].items) assert.ok(html.includes(item), `Missing confirmed skill: ${item}`);
+  }
+  const ids = new Set(attributeValues('id'));
+  for (const id of attributeValues('aria-controls')) assert.ok(ids.has(id), `Skill control has no target: ${id}`);
+  assert.match(html, /<button[^>]+id="motion-toggle"[^>]*>/, 'Motion pause should be a native button');
 });
 
 test('search and social metadata describe the real portfolio and include a valid sharing image', async () => {
