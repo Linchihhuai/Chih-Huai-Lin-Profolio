@@ -5,13 +5,16 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import data from '../content/portfolio.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const artifacts = path.join(root, 'artifacts');
 await mkdir(artifacts, { recursive: true });
 const port = process.env.TEST_PORT || '4180';
 const origin = `http://127.0.0.1:${port}`;
-const address = `${origin}/chih_huai_lin_profolio/`;
+const base = new URL(data.siteUrl).pathname.replace(/\/+$/, '');
+assert.equal(`${base}/`, '/Chih-Huai-Lin-Profolio/', 'Preview must exercise the exact public repository name and case');
+const address = `${origin}${base}/`;
 const server = spawn(process.execPath, ['scripts/serve.mjs', '--built'], {
   cwd: root, env: { ...process.env, PORT: port }, stdio: ['ignore', 'pipe', 'pipe']
 });
@@ -117,10 +120,15 @@ try {
     assert.equal(result.status(), 200, `Pages subdirectory asset missing: ${asset}`);
     assert.ok((await result.body()).length > 0);
   }
-  const redirect = await keyboard.request.get(`${origin}/chih_huai_lin_profolio`, { maxRedirects: 0 });
+  const redirect = await keyboard.request.get(`${origin}${base}`, { maxRedirects: 0 });
   assert.equal(redirect.status(), 301);
-  assert.equal(redirect.headers().location, '/chih_huai_lin_profolio/');
+  assert.equal(redirect.headers().location, `${base}/`);
   check(`Pages subdirectory: ${assets.length} assets respond 200 and base URL redirects correctly`);
+  const rootPreview = await keyboard.request.get(`${origin}/`);
+  assert.equal(rootPreview.status(), 200, 'Root preview must remain available');
+  const rootStyles = await keyboard.request.get(`${origin}/assets/styles.css`);
+  assert.equal(rootStyles.status(), 200, 'Root preview assets must remain available');
+  check('Root preview: document and stylesheet respond 200');
   await keyboardContext.close();
 
   const noJSContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });

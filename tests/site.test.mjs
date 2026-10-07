@@ -43,14 +43,15 @@ test('every fragment link has one target, and no empty or unsafe public link is 
 });
 
 test('all public assets resolve from the GitHub Pages repository subdirectory', async () => {
-  const base = new URL('https://linchihhuai.github.io/chih_huai_lin_profolio/');
+  const base = new URL(`${data.siteUrl.replace(/\/+$/, '')}/`);
+  assert.equal(base.pathname, '/Chih-Huai-Lin-Profolio/', 'Pages must use the exact public repository name and case');
   const assetPaths = [...attributeValues('src'), ...attributeValues('href')].filter((value) => value.startsWith('./assets/'));
   assert.ok(assetPaths.some((value) => value.endsWith('styles.css')));
   assert.ok(assetPaths.some((value) => value.endsWith('site.js')));
   assert.ok(assetPaths.some((value) => value.endsWith('favicon.svg')));
   for (const asset of assetPaths) {
     const resolved = new URL(asset, base);
-    assert.ok(resolved.pathname.startsWith('/chih_huai_lin_profolio/assets/'), `Asset escaped the Pages base: ${asset}`);
+    assert.ok(resolved.pathname.startsWith(`${base.pathname}assets/`), `Asset escaped the Pages base: ${asset}`);
     assert.ok((await stat(path.join(root, 'dist', asset))).size > 0, `Asset missing or empty: ${asset}`);
   }
   assert.equal(await readFile(path.join(root, 'dist/.nojekyll'), 'utf8'), '');
@@ -65,6 +66,10 @@ test('search and social metadata describe the real portfolio and include a valid
   for (const property of ['og:type', 'og:title', 'og:description', 'og:image', 'og:image:alt']) {
     assert.match(html, new RegExp(`<meta property="${property}" content="[^\"]+">`));
   }
+  const publicUrl = `${(process.env.SITE_URL || data.siteUrl).replace(/\/+$/, '')}/`;
+  assert.ok(html.includes(`<link rel="canonical" href="${publicUrl}">`), 'Canonical URL must use the deployment URL');
+  assert.ok(html.includes(`<meta property="og:url" content="${publicUrl}">`), 'Sharing URL must use the deployment URL');
+  assert.ok(html.includes(`<meta property="og:image" content="${publicUrl}assets/social-card.png">`), 'Sharing image must resolve under the deployment URL');
   const image = await readFile(path.join(root, 'dist/assets/social-card.png'));
   assert.equal(image.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', 'Sharing image must be an actual PNG');
   assert.equal(image.readUInt32BE(16), 1200);

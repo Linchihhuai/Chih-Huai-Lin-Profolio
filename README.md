@@ -14,7 +14,7 @@ npm run test:browser
 npm run dev
 ```
 
-The development server uses port 4173 and supports both the root path and `/chih_huai_lin_profolio/`. It builds when it starts; rebuild or restart it after changing content. `npm run build` writes `dist/` and refreshes the generated `index.html`. `npm run preview` serves the existing build. `PORT` changes the server port.
+Run these commands from the repository checkout. The development server uses port 4173 and supports both `http://localhost:4173/` and `http://localhost:4173/Chih-Huai-Lin-Profolio/`. Its repository path comes from `siteUrl` in the content file. It builds when it starts; rebuild or restart it after changing content. `npm run build` writes `dist/` and refreshes the generated `index.html`. `npm run preview` serves the existing build. `PORT` changes the server port.
 
 `npm test` checks the generated site. The browser checks exercise desktop and mobile layouts, navigation, keyboard use, reduced motion, accessibility, console errors, and local asset requests. Playwright uses its installed Chromium or an existing system Chromium; `PLAYWRIGHT_CHROMIUM_EXECUTABLE` can specify the executable explicitly.
 
@@ -32,10 +32,10 @@ After changing the name or introduction, run `npm run social` to refresh the com
 
 ## GitHub Pages
 
-The deployment target is a public repository named **`chih_huai_lin_profolio`** under the verified GitHub account. The workflow is prepared in `.github/workflows/pages.yml`; the presence of this workflow does not mean deployment has completed.
+The user-selected deployment target is the existing public repository [Linchihhuai/Chih-Huai-Lin-Profolio](https://github.com/Linchihhuai/Chih-Huai-Lin-Profolio). Its expected Pages URL is `https://linchihhuai.github.io/Chih-Huai-Lin-Profolio/`. The workflow is ready in `.github/workflows/pages.yml`; the presence of this workflow does not mean deployment has completed. Confirm the successful deployment and live URL in Actions before sharing it.
 
 In the target repository, enable **Settings → Pages → Build and deployment → Source → GitHub Actions**. Push the implementation to `main` or run **Validate and deploy portfolio** from the Actions tab on `main`. The workflow installs locked dependencies, runs the site and browser checks, then builds and deploys `dist/`. Pull requests run validation with read-only permissions and do not call Pages deployment actions.
 
-The build reads the actual URL from `actions/configure-pages` through `SITE_URL`, so canonical and sharing metadata match the selected Pages location. Relative asset URLs and anchor navigation work under the repository subdirectory. A local production build can use `SITE_URL=https://ACCOUNT.github.io/chih_huai_lin_profolio npm run build` after the real account and destination are confirmed.
+The content file records the expected URL in `siteUrl`. During deployment, the build reads the actual URL from `actions/configure-pages` through `SITE_URL`, so canonical and sharing metadata match the selected Pages location. Relative asset URLs and anchor navigation work under the case-sensitive repository subdirectory. A local production build can use `SITE_URL=https://linchihhuai.github.io/Chih-Huai-Lin-Profolio npm run build` to reproduce the configured Pages destination.
 
 After a successful deployment, verify the URL reported by the `github-pages` environment, including the stylesheet, script, favicon, sharing image, section navigation, and mobile layout. Repository creation and Pages configuration require usable GitHub API authentication; a successful Git read alone does not establish those permissions.

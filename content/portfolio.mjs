@@ -50,7 +50,7 @@ export default {
       contribution: 'Provided the background, content direction, and design brief; implementation developed with AI assistance.',
       technologies: ['HTML', 'CSS', 'JavaScript', 'Node.js'],
       status: 'Implemented',
-      evidence: []
+      evidence: [{ label: 'View source on GitHub', url: 'https://github.com/Linchihhuai/Chih-Huai-Lin-Profolio' }]
     }
   ],
   education: [
@@ -69,7 +69,7 @@ export default {
     resume: null
   },
   footer: 'Chih-Huai Lin · SAP ABAP Developer',
-  siteUrl: '',
+  siteUrl: 'https://linchihhuai.github.io/Chih-Huai-Lin-Profolio',
   // Editable examples. They are excluded from every public build.
   // Replace the examples with confirmed details, then move them into the
   // corresponding experience / education / projects array above.
